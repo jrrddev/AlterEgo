@@ -67,7 +67,8 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch response");
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to fetch response");
       }
 
       const data = await response.json();
@@ -87,12 +88,12 @@ export default function Home() {
         rate: selectedPersona.id === 'zen_master' ? 0.8 : selectedPersona.id === 'hype_coach' ? 1.2 : 1.0,
       });
 
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       const errorMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "Oops! Something went wrong communicating with my inner self. Please try again.",
+        content: `Oops! ${error.message || "Something went wrong."}`,
         personaId: selectedPersona.id,
       };
       setMessages(prev => [...prev, errorMsg]);
