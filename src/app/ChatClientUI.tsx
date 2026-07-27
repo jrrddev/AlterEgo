@@ -4,7 +4,9 @@ import { useState, useRef, useEffect } from "react";
 import { PersonaSelector } from "@/components/chat/PersonaSelector";
 import { MessageBubble, type Message } from "@/components/chat/MessageBubble";
 import { ChatInput } from "@/components/chat/ChatInput";
+import { ModelSelector } from "@/components/chat/ModelSelector";
 import { personas, personaList, PersonaId } from "@/lib/personas";
+import { modelList } from "@/lib/models";
 import { speechService } from "@/lib/speech";
 import { logout } from "@/app/actions";
 import { LogOut, Bug, Menu, X, History } from "lucide-react";
@@ -18,10 +20,24 @@ export default function ChatClientUI({
 }) {
   const [usage, setUsage] = useState(initialUsage);
   const [selectedPersona, setSelectedPersona] = useState(personaList[0]);
+  const [selectedModelId, setSelectedModelId] = useState(modelList[0].id);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Load saved server preference on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('alterego_preferred_server');
+    if (saved && modelList.find(m => m.id === saved)) {
+      setSelectedModelId(saved);
+    }
+  }, []);
+
+  const handleServerChange = (id: string) => {
+    setSelectedModelId(id);
+    localStorage.setItem('alterego_preferred_server', id);
+  };
 
   // Load history from DB on persona change
   useEffect(() => {
@@ -62,12 +78,15 @@ export default function ChatClientUI({
         body: JSON.stringify({
           content,
           personaId: selectedPersona.id,
+          modelId: selectedModelId,
         }),
       });
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.error || "Failed to fetch response");
+        const errorToThrow = new Error(errData.error || "Failed to fetch response") as any;
+        errorToThrow.details = errData.details;
+        throw errorToThrow;
       }
 
       const data = await response.json();
@@ -91,14 +110,17 @@ export default function ChatClientUI({
         rate: selectedPersona.id === 'zen_master' ? 0.8 : selectedPersona.id === 'hype_coach' ? 1.2 : 1.0,
       });
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error(error);
-      const e = error as Error;
       const errorMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: `Oops! ${e.message || "Something went wrong."}`,
-        errorPayload: JSON.stringify({ error: e.message, time: new Date().toISOString() }, null, 2),
+        content: `Oops! ${error.message || "Something went wrong."}\n\n💡 Tip: Try switching to a different Server Connection in the sidebar menu!`,
+        errorPayload: JSON.stringify({ 
+          error: error.message, 
+          details: error.details ? JSON.parse(error.details) : undefined,
+          time: new Date().toISOString() 
+        }, null, 2),
         personaId: selectedPersona.id,
         isError: true,
       };
@@ -154,6 +176,12 @@ export default function ChatClientUI({
           <PersonaSelector
             selectedPersona={selectedPersona}
             onSelect={handleSelectPersona}
+          />
+        </div>
+        <div className="flex-1 mt-4">
+          <ModelSelector
+            selectedModelId={selectedModelId}
+            onSelect={handleServerChange}
           />
         </div>
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1-beta 7-27-2026
+### Updates
+Server & API Integration
+- Added Gemini AI to Server 2
+- Saved server selection on refresh
+
 ## v1.0-beta 7-27-2026
 ### Release
 Initial Release

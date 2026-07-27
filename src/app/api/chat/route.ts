@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { personas, PersonaId } from '@/lib/personas';
+import { models } from '@/lib/models';
 import { getSession } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 
@@ -10,7 +11,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized. Please log in.' }, { status: 401 });
     }
 
-    const { content: userContent, personaId } = await req.json();
+    const { content: userContent, personaId, modelId } = await req.json();
 
     if (!userContent || typeof userContent !== 'string') {
       return NextResponse.json({ error: 'Message content is required' }, { status: 400 });
@@ -66,32 +67,73 @@ export async function POST(req: Request) {
       content: userContent
     }]);
 
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-        "X-Title": "AlterEgo AI",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "nvidia/nemotron-3-nano-30b-a3b:free",
-        temperature: persona.temperature,
-        messages: [
-          { role: "system", content: persona.systemPrompt + "\n\nIMPORTANT: You must reply in English only." },
-          ...previousMessages,
-          { role: "user", content: userContent }
-        ],
-      }),
-    });
+    const aiModel = models[modelId] || models['server_1'];
+    let assistantContent = "";
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      return NextResponse.json({ error: 'Provider returned error', details: errorText }, { status: response.status });
+    if (aiModel.id === 'server_1') {
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+          "X-Title": "AlterEgo AI",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: aiModel.modelString,
+          temperature: persona.temperature,
+          messages: [
+            { role: "system", content: persona.systemPrompt + "\n\nIMPORTANT: You must reply in English only." },
+            ...previousMessages,
+            { role: "user", content: userContent }
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        return NextResponse.json({ error: 'Provider returned error', details: errorText }, { status: response.status });
+      }
+
+      const data = await response.json();
+      assistantContent = data.choices[0]?.message?.content || "";
+    } else if (aiModel.id === 'server_2') {
+      const geminiKey = process.env.geminiAPIKey?.replace(/["'\r\n]/g, '').trim();
+      if (!geminiKey) {
+        return NextResponse.json({ error: 'Gemini API Key not configured.' }, { status: 500 });
+      }
+
+      const geminiMessages = previousMessages.map(msg => ({
+        role: msg.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: msg.content }]
+      }));
+      
+      geminiMessages.push({ role: 'user', parts: [{ text: userContent }] });
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${aiModel.modelString}:generateContent?key=${geminiKey}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: persona.systemPrompt + "\n\nIMPORTANT: You must reply in English only." }]
+          },
+          contents: geminiMessages,
+          generationConfig: {
+             temperature: persona.temperature
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        return NextResponse.json({ error: 'Provider returned error', details: errorText }, { status: response.status });
+      }
+
+      const data = await response.json();
+      assistantContent = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
     }
-
-    const data = await response.json();
-    const assistantContent = data.choices[0]?.message?.content || "";
 
     // Save assistant message to DB
     await supabase.from('chat_messages').insert([{
