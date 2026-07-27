@@ -61,7 +61,9 @@ export default function Home() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: updatedMessages.map(m => ({ role: m.role, content: m.content })),
+          messages: updatedMessages
+            .filter(m => !m.isError)
+            .map(m => ({ role: m.role, content: m.content })),
           personaId: selectedPersona.id,
         }),
       });
@@ -95,6 +97,7 @@ export default function Home() {
         role: "assistant",
         content: `Oops! ${error.message || "Something went wrong."}`,
         personaId: selectedPersona.id,
+        isError: true,
       };
       setMessages(prev => [...prev, errorMsg]);
     } finally {
@@ -110,7 +113,13 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen bg-background text-foreground overflow-hidden">
+    <div 
+      className="flex h-screen bg-background text-foreground overflow-hidden transition-colors duration-700"
+      style={{
+        '--color-primary-500': selectedPersona.primaryColor,
+        '--color-primary-600': selectedPersona.secondaryColor,
+      } as React.CSSProperties}
+    >
       {/* Sidebar / Persona Selection */}
       <aside className="w-80 border-r border-white/5 bg-surface/30 backdrop-blur-md hidden md:flex flex-col p-6 overflow-y-auto z-10 relative">
         <div className="flex items-center gap-3 mb-10">

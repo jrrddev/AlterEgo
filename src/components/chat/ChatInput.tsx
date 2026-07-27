@@ -45,7 +45,7 @@ export function ChatInput({ onSend, isLoading }: ChatInputProps) {
     <div className="w-full relative">
       <form 
         onSubmit={handleSubmit}
-        className="relative flex items-end w-full glass-panel p-2 rounded-2xl border-white/10 focus-within:border-primary-500/50 focus-within:shadow-[0_0_15px_rgba(139,92,246,0.1)] transition-all duration-300"
+        className="relative flex items-end w-full glass-panel p-2 rounded-2xl border-white/10 focus-within:border-primary-500/50 focus-within:shadow-[0_0_15px_var(--color-primary-500)] focus-within:shadow-primary-500/20 transition-all duration-300"
       >
         <button
           type="button"

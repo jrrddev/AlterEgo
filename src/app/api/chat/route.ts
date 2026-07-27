@@ -30,10 +30,10 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemma-4-31b-it:free",
+        model: "nvidia/nemotron-3-nano-30b-a3b:free",
         temperature: persona.temperature,
         messages: [
-          { role: "system", content: persona.systemPrompt },
+          { role: "system", content: persona.systemPrompt + "\n\nIMPORTANT: You must reply in English only." },
           ...messages
         ],
       }),

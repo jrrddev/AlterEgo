@@ -40,9 +40,6 @@ export function PersonaSelector({ selectedPersona, onSelect }: PersonaSelectorPr
               )}>
                 {persona.name}
               </span>
-              <span className="text-xs text-white/40 font-mono mt-0.5">
-                Temp: {persona.temperature}
-              </span>
             </div>
           </button>
         ))}

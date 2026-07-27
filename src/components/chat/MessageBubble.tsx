@@ -9,9 +9,10 @@ function cn(...inputs: ClassValue[]) {
 
 export interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: 'user' | 'assistant' | 'system';
   content: string;
   personaId?: string; // Optional: to track which persona generated this if it's an assistant message
+  isError?: boolean;
 }
 
 interface MessageBubbleProps {
@@ -36,7 +37,7 @@ export function MessageBubble({ message, currentPersona }: MessageBubbleProps) {
           "flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full shadow-lg border",
           isUser 
             ? "bg-primary-600/20 border-primary-500/30 text-primary-400" 
-            : "bg-surface border-surface-border text-2xl"
+            : "bg-surface border-primary-500/30 shadow-[0_0_15px_var(--color-primary-500)] text-2xl shadow-primary-500/20"
         )}>
           {isUser ? <User size={20} /> : currentPersona.avatar}
         </div>
