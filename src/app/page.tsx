@@ -25,7 +25,6 @@ export default function Home() {
           setMessages(parsed.messages);
         }
         if (parsed.personaId && personas[parsed.personaId as PersonaId]) {
-          // eslint-disable-next-line react-hooks/set-state-in-effect
           setSelectedPersona(personas[parsed.personaId as PersonaId]);
         }
       } catch (e) {
