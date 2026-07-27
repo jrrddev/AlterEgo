@@ -11,9 +11,9 @@ import { LogOut, Bug, Menu, X, History } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ChatClientUI({ 
-  initialUsage 
-}: { 
+export default function ChatClientUI({
+  initialUsage
+}: {
   initialUsage: { sent: number; limit: number }
 }) {
   const [usage, setUsage] = useState(initialUsage);
@@ -71,11 +71,11 @@ export default function ChatClientUI({
       }
 
       const data = await response.json();
-      
+
       if (data.usage) {
         setUsage(data.usage);
       }
-      
+
       const assistantMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
@@ -84,7 +84,7 @@ export default function ChatClientUI({
       };
 
       setMessages(prev => [...prev, assistantMsg]);
-      
+
       // Speak the response if not muted
       speechService.speak(data.content, {
         pitch: selectedPersona.id === 'zen_master' ? 0.8 : selectedPersona.id === 'hype_coach' ? 1.2 : 1.0,
@@ -116,7 +116,7 @@ export default function ChatClientUI({
   };
 
   return (
-    <div 
+    <div
       className="flex h-screen bg-background text-foreground overflow-hidden transition-colors duration-700"
       style={{
         '--color-primary-500': selectedPersona.primaryColor,
@@ -125,7 +125,7 @@ export default function ChatClientUI({
     >
       {/* Mobile Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -142,18 +142,18 @@ export default function ChatClientUI({
               AlterEgo
             </h1>
           </div>
-          <button 
+          <button
             className="md:hidden text-white/50 hover:text-white"
             onClick={() => setIsSidebarOpen(false)}
           >
             <X size={24} />
           </button>
         </div>
-        
+
         <div className="flex-1">
-          <PersonaSelector 
-            selectedPersona={selectedPersona} 
-            onSelect={handleSelectPersona} 
+          <PersonaSelector
+            selectedPersona={selectedPersona}
+            onSelect={handleSelectPersona}
           />
         </div>
 
@@ -172,13 +172,13 @@ export default function ChatClientUI({
               </span>
             </div>
           </div>
-          <button 
+          <button
             onClick={clearChat}
             className="py-3 px-4 rounded-xl text-sm font-medium text-white/50 hover:text-white/90 hover:bg-white/5 transition-colors border border-transparent hover:border-white/10"
           >
             Clear Conversation / History
           </button>
-          
+
           <Link
             href="/changelog"
             className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-medium text-white/60 hover:text-white/90 hover:bg-white/5 transition-colors border border-transparent hover:border-white/10"
@@ -194,7 +194,7 @@ export default function ChatClientUI({
           >
             <Bug size={16} /> Report Issue / Contact Dev
           </a>
-          <button 
+          <button
             onClick={() => logout()}
             className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-medium text-white/40 hover:text-red-400 hover:bg-white/5 transition-colors"
           >
@@ -208,7 +208,7 @@ export default function ChatClientUI({
         {/* Mobile Header */}
         <header className="md:hidden flex flex-col p-3 border-b border-white/5 bg-surface/50 backdrop-blur-md sticky top-0 z-30 gap-3">
           <div className="flex items-center justify-between">
-            <button 
+            <button
               className="text-white/70 hover:text-white p-1 -ml-1"
               onClick={() => setIsSidebarOpen(true)}
             >
@@ -219,7 +219,7 @@ export default function ChatClientUI({
             </div>
           </div>
           <div className="flex items-center justify-center bg-white/5 border border-white/10 rounded-lg py-1.5 px-3 text-[11px] uppercase tracking-wider font-medium">
-             <span className="text-white/50">Messages Left: <span className="text-white/90 ml-1">{Math.max(0, usage.limit - usage.sent)}</span></span>
+            <span className="text-white/50">Messages Left: <span className="text-white/90 ml-1">{Math.max(0, usage.limit - usage.sent)}</span></span>
           </div>
         </header>
 
@@ -233,17 +233,17 @@ export default function ChatClientUI({
                   Say hi to your {selectedPersona.name}
                 </h3>
                 <p className="max-w-md text-sm">
-                  This persona will respond based on its unique behavioral traits. 
+                  This persona will respond based on its unique behavioral traits.
                   Try sending a message!
                 </p>
               </div>
             ) : (
               <div className="flex flex-col">
                 {messages.map(msg => (
-                  <MessageBubble 
-                    key={msg.id} 
-                    message={msg} 
-                    currentPersona={selectedPersona} 
+                  <MessageBubble
+                    key={msg.id}
+                    message={msg}
+                    currentPersona={selectedPersona}
                   />
                 ))}
                 <div ref={messagesEndRef} />

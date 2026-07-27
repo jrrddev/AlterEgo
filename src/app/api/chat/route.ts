@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid persona ID' }, { status: 400 });
     }
 
-    // Check user limit
+    // Verify user message quota
     const { data: user, error: userErr } = await supabase
       .from('app_users')
       .select('messages_sent, message_limit')
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'OpenRouter API Key not configured.' }, { status: 500 });
     }
 
-    // Load recent history (up to 20 messages)
+    // Fetch recent chat history
     const { data: history } = await supabase
       .from('chat_messages')
       .select('role, content')
@@ -101,15 +101,15 @@ export async function POST(req: Request) {
       content: assistantContent
     }]);
 
-    // Increment user usage counter
+    // Update user usage metric
     const { error: rpcError } = await supabase.rpc('increment_message_count', { user_id: session.userId });
     if (rpcError) {
-      // Fallback if RPC isn't created
+      // Fallback to direct update if RPC fails
       await supabase.from('app_users').update({ messages_sent: user.messages_sent + 1 }).eq('id', session.userId);
     }
 
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       content: assistantContent,
       usage: { sent: user.messages_sent + 1, limit: user.message_limit }
     });

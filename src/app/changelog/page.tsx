@@ -21,7 +21,7 @@ export default async function ChangelogPage() {
     changes: string[];
   }
 
-  // A very lightweight parser to turn the markdown into a beautiful timeline
+  // Parse markdown into structured format
   const lines = rawContent.split('\n');
   const versions: Version[] = [];
   let currentVersion: Version | null = null;
@@ -35,7 +35,7 @@ export default async function ChangelogPage() {
       const titleParts = text.replace('## ', '').split(' ');
       const versionNumber = titleParts[0];
       const date = titleParts.slice(1).join(' ');
-      
+
       currentVersion = {
         version: versionNumber,
         date: date,
@@ -66,8 +66,8 @@ export default async function ChangelogPage() {
   return (
     <div className="min-h-screen bg-background text-foreground p-6 md:p-12 overflow-y-auto font-sans">
       <div className="max-w-2xl mx-auto animate-fade-in">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="inline-flex items-center gap-2 text-white/40 hover:text-white mb-16 transition-colors text-sm font-medium"
         >
           <ArrowLeft size={16} /> Back to Chat
@@ -85,7 +85,7 @@ export default async function ChangelogPage() {
         <div className="relative border-l border-white/10 ml-2 md:ml-4 space-y-16 pb-8">
           {versions.map((v, i) => (
             <div key={i} className="relative pl-8 md:pl-12">
-              {/* Simple Timeline Dot */}
+              {/* Timeline indicator */}
               <div className="absolute left-0 top-2 w-2.5 h-2.5 rounded-full bg-primary-500 -translate-x-[5.5px] ring-4 ring-background" />
 
               <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-6">
@@ -98,13 +98,13 @@ export default async function ChangelogPage() {
                   </span>
                 )}
               </div>
-              
+
               {v.description && (
                 <p className="text-white/60 text-sm mb-6 leading-relaxed">
                   {v.description}
                 </p>
               )}
-              
+
               {v.changes.length > 0 && (
                 <ul className="space-y-3">
                   {v.changes.map((change: string, idx: number) => (

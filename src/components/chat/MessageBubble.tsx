@@ -40,8 +40,8 @@ export function MessageBubble({ message, currentPersona }: MessageBubbleProps) {
         {/* Avatar */}
         <div className={cn(
           "flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full shadow-lg border",
-          isUser 
-            ? "bg-primary-600/20 border-primary-500/30 text-primary-400" 
+          isUser
+            ? "bg-primary-600/20 border-primary-500/30 text-primary-400"
             : "bg-surface border-primary-500/30 shadow-[0_0_15px_var(--color-primary-500)] text-2xl shadow-primary-500/20"
         )}>
           {isUser ? <User size={20} /> : currentPersona.avatar}
@@ -57,15 +57,15 @@ export function MessageBubble({ message, currentPersona }: MessageBubbleProps) {
           </span>
           <div className={cn(
             "p-4 rounded-2xl leading-relaxed whitespace-pre-wrap glass-panel",
-            isUser 
-              ? "bg-primary-600/10 border-primary-500/20 text-white/90 rounded-tr-sm" 
+            isUser
+              ? "bg-primary-600/10 border-primary-500/20 text-white/90 rounded-tr-sm"
               : "text-white/80 rounded-tl-sm"
           )}>
             {message.content}
             {message.isError && message.errorPayload && (
               <div className="mt-4 border-t border-white/10 pt-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <button 
+                  <button
                     onClick={() => setShowError(!showError)}
                     className="text-xs text-primary-400 hover:text-primary-300 font-medium underline"
                   >
