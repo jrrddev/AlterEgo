@@ -5,22 +5,27 @@ import { speechService } from '@/lib/speech';
 interface ChatInputProps {
   onSend: (message: string) => void;
   isLoading: boolean;
+  disabled?: boolean;
 }
 
-export function ChatInput({ onSend, isLoading }: ChatInputProps) {
+export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
   const [input, setInput] = useState('');
   const [isMuted, setIsMuted] = useState(speechService.getMutedState());
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (input.trim() && !isLoading) {
+    if (input.trim() && !isLoading && !disabled) {
       onSend(input.trim());
       setInput('');
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (disabled) return;
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
@@ -61,15 +66,15 @@ export function ChatInput({ onSend, isLoading }: ChatInputProps) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask me anything..."
-          className="w-full bg-transparent border-none text-white/90 placeholder:text-white/30 resize-none outline-none py-3 px-2 max-h-[150px] overflow-y-auto font-sans text-base"
+          placeholder={disabled ? "Please clear history to continue chatting..." : "Type your message..."}
+          className="w-full bg-transparent border-none text-white/90 placeholder:text-white/30 resize-none outline-none py-3 px-2 max-h-[150px] overflow-y-auto font-sans text-base disabled:opacity-50"
           rows={1}
-          disabled={isLoading}
+          disabled={isLoading || disabled}
         />
         
         <button
           type="submit"
-          disabled={!input.trim() || isLoading}
+          disabled={!input.trim() || isLoading || disabled}
           className="p-3 mb-1 ml-2 self-end rounded-xl bg-primary-600/80 text-white hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg"
         >
           {isLoading ? (
@@ -80,7 +85,7 @@ export function ChatInput({ onSend, isLoading }: ChatInputProps) {
         </button>
       </form>
       <div className="text-center mt-2 text-[10px] text-white/30 uppercase tracking-widest font-mono">
-        AlterEgo AI • Shift+Enter for new line
+        AlterEgo is AI and can make mistakes
       </div>
     </div>
   );

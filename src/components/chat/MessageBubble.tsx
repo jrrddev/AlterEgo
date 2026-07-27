@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { User } from 'lucide-react';
@@ -11,8 +14,9 @@ export interface Message {
   id: string;
   role: 'user' | 'assistant' | 'system';
   content: string;
-  personaId?: string; // Optional: to track which persona generated this if it's an assistant message
+  personaId?: string;
   isError?: boolean;
+  errorPayload?: string;
 }
 
 interface MessageBubbleProps {
@@ -22,6 +26,7 @@ interface MessageBubbleProps {
 
 export function MessageBubble({ message, currentPersona }: MessageBubbleProps) {
   const isUser = message.role === 'user';
+  const [showError, setShowError] = useState(false);
 
   return (
     <div className={cn(
@@ -57,6 +62,26 @@ export function MessageBubble({ message, currentPersona }: MessageBubbleProps) {
               : "text-white/80 rounded-tl-sm"
           )}>
             {message.content}
+            {message.isError && message.errorPayload && (
+              <div className="mt-4 border-t border-white/10 pt-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <button 
+                    onClick={() => setShowError(!showError)}
+                    className="text-xs text-primary-400 hover:text-primary-300 font-medium underline"
+                  >
+                    {showError ? 'Hide Dev Report' : 'Show Dev Report'}
+                  </button>
+                  <a href="https://jrrd.dev" target="_blank" rel="noopener noreferrer" className="text-xs text-white/40 hover:text-white/80 underline underline-offset-2">
+                    Contact Developer
+                  </a>
+                </div>
+                {showError && (
+                  <pre className="mt-2 p-3 bg-black/40 rounded-lg text-xs font-mono text-red-300 overflow-x-auto">
+                    {message.errorPayload}
+                  </pre>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
