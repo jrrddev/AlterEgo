@@ -10,6 +10,9 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "AlterEgo AI",
   description: "Defy typical AI conversations with adaptive personalities.",
+  icons: {
+    icon: "/AlterEgoLogo.webp",
+  },
 };
 
 export default function RootLayout({

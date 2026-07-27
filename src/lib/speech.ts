@@ -4,7 +4,7 @@ export class SpeechService {
   private isMuted: boolean = false;
 
   constructor() {
-    this.synth = typeof window !== 'undefined' ? window.speechSynthesis : (null as any);
+    this.synth = typeof window !== 'undefined' ? window.speechSynthesis : (null as unknown as SpeechSynthesis);
     if (this.synth) {
       this.initVoice();
       // Voices load asynchronously in some browsers

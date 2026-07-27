@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { Bot, User } from 'lucide-react';
+import { User } from 'lucide-react';
 import { Persona } from '@/lib/personas';
 
 function cn(...inputs: ClassValue[]) {

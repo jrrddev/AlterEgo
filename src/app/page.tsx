@@ -6,7 +6,7 @@ import { MessageBubble, type Message } from "@/components/chat/MessageBubble";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { personas, personaList, PersonaId } from "@/lib/personas";
 import { speechService } from "@/lib/speech";
-import { Bot } from "lucide-react";
+import Image from "next/image";
 
 export default function Home() {
   const [selectedPersona, setSelectedPersona] = useState(personaList[0]);
@@ -20,8 +20,12 @@ export default function Home() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed.messages) setMessages(parsed.messages);
+        if (parsed.messages) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setMessages(parsed.messages);
+        }
         if (parsed.personaId && personas[parsed.personaId as PersonaId]) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setSelectedPersona(personas[parsed.personaId as PersonaId]);
         }
       } catch (e) {
@@ -110,8 +114,8 @@ export default function Home() {
       {/* Sidebar / Persona Selection */}
       <aside className="w-80 border-r border-white/5 bg-surface/30 backdrop-blur-md hidden md:flex flex-col p-6 overflow-y-auto z-10 relative">
         <div className="flex items-center gap-3 mb-10">
-          <div className="w-10 h-10 rounded-xl bg-primary-600 flex items-center justify-center shadow-lg shadow-primary-500/20">
-            <Bot className="text-white" size={24} />
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg overflow-hidden shrink-0">
+            <Image src="/AlterEgoLogo.webp" alt="AlterEgo Logo" width={40} height={40} className="object-cover w-full h-full" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
             AlterEgo
