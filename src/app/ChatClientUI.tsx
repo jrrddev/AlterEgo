@@ -115,7 +115,7 @@ export default function ChatClientUI({
       const errorMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: `Oops! ${error.message || "Something went wrong."}\n\n💡 Tip: Try switching to a different Server Connection in the sidebar menu!`,
+        content: `Oops! ${error.message || "Something went wrong."}\n\n💡 Tip: Try switching to a different Server Connection in top or sidebar menu!`,
         errorPayload: JSON.stringify({ 
           error: error.message, 
           details: error.details ? JSON.parse(error.details) : undefined,
@@ -242,12 +242,45 @@ export default function ChatClientUI({
             >
               <Menu size={24} />
             </button>
-            <div className="text-sm font-medium text-primary-400 flex items-center gap-2">
-              {selectedPersona.name} {selectedPersona.avatar}
+            <div className="relative shadow-sm rounded-full">
+              <select 
+                value={selectedPersona.id}
+                onChange={(e) => handleSelectPersona(e.target.value as PersonaId)}
+                className="bg-gradient-to-r from-primary-500/10 to-primary-600/10 border border-primary-500/30 text-primary-400 rounded-full py-2 pl-4 pr-9 text-xs font-bold outline-none appearance-none backdrop-blur-md focus:ring-2 focus:ring-primary-500/50 transition-all cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23999%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 6px center",
+                  backgroundSize: "14px"
+                }}
+              >
+                {personaList.map(p => (
+                  <option key={p.id} value={p.id} className="bg-background text-white">{p.name} {p.avatar}</option>
+                ))}
+              </select>
             </div>
           </div>
-          <div className="flex items-center justify-center bg-white/5 border border-white/10 rounded-lg py-1.5 px-3 text-[11px] uppercase tracking-wider font-medium">
-            <span className="text-white/50">Messages Left: <span className="text-white/90 ml-1">{Math.max(0, usage.limit - usage.sent)}</span></span>
+          <div className="flex items-center justify-between gap-3 mt-1">
+            <div className="relative flex-1 shadow-sm rounded-full">
+              <select 
+                value={selectedModelId}
+                onChange={(e) => handleServerChange(e.target.value)}
+                className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 rounded-full py-2 pl-4 pr-9 text-xs font-medium outline-none appearance-none backdrop-blur-md shadow-inner focus:ring-2 focus:ring-white/20 transition-all cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23999%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 6px center",
+                  backgroundSize: "14px"
+                }}
+              >
+                {modelList.map(m => (
+                  <option key={m.id} value={m.id} className="bg-background text-white">{m.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center justify-center bg-white/5 border border-white/10 rounded-full py-2 px-4 text-[10px] uppercase tracking-wider font-bold whitespace-nowrap shadow-inner backdrop-blur-md">
+              <span className="text-white/50">Chat Limit Plan: <span className="text-white/90 ml-1">{Math.max(0, usage.limit - usage.sent)}</span></span>
+            </div>
           </div>
         </header>
 
