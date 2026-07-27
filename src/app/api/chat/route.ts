@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.3-70b-instruct:free",
+        model: "meta-llama/llama-3-8b-instruct:free",
         temperature: persona.temperature,
         messages: [
           { role: "system", content: persona.systemPrompt },
