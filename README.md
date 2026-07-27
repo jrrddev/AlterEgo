@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AlterEgo 🎭
 
-## Getting Started
+AlterEgo is a dynamic, multi-persona AI chat application built with Next.js. It allows users to chat with distinct AI personalities (like a Zen Master, Hype Coach, or Technical Architect), complete with dynamic UI theming, Text-to-Speech voices, and a robust multi-server backend.
 
-First, run the development server:
+**🌐 Access the App:** [https://alterego.jrrd.dev](https://alterego.jrrd.dev)  
+*(Note: This project is currently in active development)*
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🌟 Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* **🎭 Dynamic AI Personas**: Instantly switch between AI personalities. The entire UI theme and Voice output automatically adapts to the selected persona.
+* **🗣️ Native Text-to-Speech**: AlterEgo speaks to you! Voice modulation (pitch and rate) changes based on the persona's vibe.
+* **⚡ Multi-Server Redundancy**: Swap between native Google Gemini Flash and OpenRouter LLMs seamlessly to bypass rate limits or provider downtime.
+* **📱 Responsive Design**: A beautiful, glassmorphism-inspired UI that looks perfect on both desktop and mobile devices.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔒 Privacy Policy & Data Handling
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Because AlterEgo does not currently have a dedicated standalone Privacy Policy page, please note the following regarding your data:
+* **Liability**: The developer is not liable for data generated, chat histories, or API provider outages.
+* **Data Privacy**: Your personal chat data is completely private and is not shared with any third-party marketing services. 
+* **Shared Test Accounts**: **WARNING:** If you are using a shared test account provided by the developer, your chat history is visible to anyone else using that same test account unless you manually clear/delete the history! Do not share sensitive personal information on a shared test account.
 
-## Learn More
+## 🛠️ Contact & Collaboration
 
-To learn more about Next.js, take a look at the following resources:
+* **Test Accounts**: Want to try the app but don't have an account? Contact the developer.
+* **Feedback**: For improvements, bug reports, and potential collaborations, please reach out!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Developer Portfolio / Contact:** [https://jrrd.dev](https://jrrd.dev)
