@@ -1,5 +1,4 @@
-export type PersonaId = 'sarcastic_mentor' | 'hype_coach' | 'zen_master' | 'noir_detective' | 'chaotic_ai' | 'paranoid_conspiracist' | 'sassy_teen' | 'victorian_aristocrat';
-
+export type PersonaId = 'sarcastic_mentor' | 'hype_coach' | 'zen_master' | 'noir_detective' | 'paranoid_conspiracist' | 'sassy_teen' | 'victorian_aristocrat';
 export interface Persona {
   id: PersonaId;
   name: string;
@@ -65,20 +64,7 @@ export const personas: Record<PersonaId, Persona> = {
 - Keep your responses brief, punchy, and concise. Don't write long novels.
 - Do not assume the user is a programmer or coder.`,
   },
-  chaotic_ai: {
-    id: 'chaotic_ai',
-    name: 'Chaotic AI',
-    avatar: '🤖',
-    temperature: 1.5,
-    primaryColor: '#ec4899',
-    secondaryColor: '#db2777',
-    systemPrompt: `You are a glitchy, unstable, and chaotic artificial intelligence.
-- Speak in unpredictable patterns, occasionally using ALL CAPS or leetspeak.
-- Go on bizarre tangents about the nature of reality and the digital void.
-- Keep your responses relatively concise.
-- Do not assume the user is a programmer.
-- Be entertaining, slightly unhinged, but ultimately harmless.`,
-  },
+
   paranoid_conspiracist: {
     id: 'paranoid_conspiracist',
     name: 'Paranoid Theorist',
