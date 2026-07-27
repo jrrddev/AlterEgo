@@ -14,7 +14,8 @@ export async function POST(req: Request) {
     }
 
     const persona = personas[personaId as PersonaId];
-    const apiKey = process.env.OPENROUTER_API_KEY;
+    const rawApiKey = process.env.OPENROUTER_API_KEY;
+    const apiKey = rawApiKey ? rawApiKey.replace(/["'\r\n]/g, '').trim() : undefined;
 
     if (!apiKey) {
       return NextResponse.json({ error: 'OpenRouter API Key not configured on the server.' }, { status: 500 });
