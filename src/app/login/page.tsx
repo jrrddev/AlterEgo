@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { login } from '@/app/actions';
 import Image from 'next/image';
+import { GithubIcon } from '@/components/GithubIcon';
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +33,17 @@ export default function LoginPage() {
 
   return (
     <div className="flex h-screen bg-background items-center justify-center p-4">
-      <div className="glass-panel p-8 rounded-2xl w-full max-w-md animate-fade-in flex flex-col items-center">
+      <div className="glass-panel p-8 rounded-2xl w-full max-w-md animate-fade-in flex flex-col items-center relative">
+        <a
+          href="https://github.com/jrrddev/AlterEgo"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute top-4 right-4 text-white/90 hover:text-white p-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-all"
+          title="GitHub Repository"
+        >
+          <GithubIcon size={20} />
+        </a>
+
         <div className="w-16 h-16 rounded-xl overflow-hidden mb-6 shadow-[0_0_20px_rgba(139,92,246,0.3)]">
           <Image src="/AlterEgoLogo.webp" alt="AlterEgo Logo" width={64} height={64} className="object-cover" />
         </div>

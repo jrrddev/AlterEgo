@@ -10,6 +10,7 @@ import { modelList } from "@/lib/models";
 import { speechService } from "@/lib/speech";
 import { logout } from "@/app/actions";
 import { LogOut, Bug, Menu, X, History } from "lucide-react";
+import { GithubIcon } from "@/components/GithubIcon";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -164,12 +165,23 @@ export default function ChatClientUI({
               AlterEgo
             </h1>
           </div>
-          <button
-            className="md:hidden text-white/50 hover:text-white"
-            onClick={() => setIsSidebarOpen(false)}
-          >
-            <X size={24} />
-          </button>
+          <div className="flex items-center gap-1">
+            <a
+              href="https://github.com/jrrddev/AlterEgo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/90 hover:text-white transition-all p-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10"
+              title="GitHub Repository"
+            >
+              <GithubIcon size={20} />
+            </a>
+            <button
+              className="md:hidden text-white/50 hover:text-white p-2"
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <X size={24} />
+            </button>
+          </div>
         </div>
 
         <div className="flex-1">
